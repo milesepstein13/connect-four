@@ -120,18 +120,18 @@ public class GameBoard {
         try {
             int consecutive = 0;
             for (int i = 0; i < 4; i++) {
-                for (int j = 0; j < 4; j++) {
-                    if (board.get(column + i).get(height + (direction * j)).getColor() == color) {
-                        consecutive++;
-                        if (consecutive == 4) {
-                            return true; // if there have been 4 pieces in a row of the given color
-                        }
-                    } else {
-                        return false; //if you run into a piece of the wrong color
+                if (board.get(column + i).get(height + (direction * i)).getColor() == color) {
+                    consecutive++;
+                    if (consecutive == 4) {
+                        return true; // if there have been 4 pieces in a row of the given color
                     }
+                } else {
+                    return false; //if you run into a piece of the wrong color
                 }
             }
-            return false;
+            return false;// this line should never be reached because it will hit a return statement
+            // inside the previous for loop, but it is necessary for the code to compile. This
+            // makes code coverage less than 100% even though everything that should be reached is
         } catch (Exception e) { // if the four to the right include an empty spot (would give an array out of bounds)
             return false;
         }
@@ -193,7 +193,9 @@ public class GameBoard {
                     return false; //if you run into a piece of the wrong color
                 }
             }
-            return false;
+            return false; // this line should never be reached because it will hit a return statement
+            // inside the previous for loop, but it is necessary for the code to compile. This
+            // makes code coverage less than 100% even though everything that should be reached is
         } catch (Exception e) { // if the four to the right include an empty spot (would give an array out of bounds)
             return false;
         }
