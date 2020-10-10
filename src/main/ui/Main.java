@@ -6,8 +6,8 @@ public class Main {
         test[1][0] = 99;
         System.out.println(test[1][0]);
         System.out.println(test[0]);
-        for (int i = 0; i < 0; i++) {
-            System.out.println("aa");
+        for (int i = 0; i < 20; i++) {
+            System.out.println((int) (Math.random() * 7));
         }
 
 

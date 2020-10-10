@@ -7,10 +7,10 @@ public class GamePiece {
 
     private int color;
 
-    // REQUIRES: color is "red" or "yellow"
+    // REQUIRES: color is 0 or 1;
     // EFFECTS: creates a game piece of given color
-    public GamePiece(String color) {
-        if (color.equals("red")) {
+    public GamePiece(int color) {
+        if (color == RED) {
             this.color = RED;
         } else {
             this.color = YELLOW;

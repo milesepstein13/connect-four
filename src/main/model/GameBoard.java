@@ -9,6 +9,9 @@ public class GameBoard {
     public static final int RED = 0;
     public static final int YELLOW = 1;
 
+    private int redWins;
+    private int yellowWins;
+    private int ties;
     private ArrayList<ArrayList<GamePiece>> board;
 
     // MODIFIES: this
@@ -19,8 +22,33 @@ public class GameBoard {
             ArrayList<GamePiece> emptyColumn = new ArrayList<>();
             board.add(emptyColumn);
         }
+        redWins = 0;
+        yellowWins = 0;
     }
 
+    public int getRedWins() {
+        return redWins;
+    }
+
+    public int getYellowWins() {
+        return yellowWins;
+    }
+
+    public int getTies() {
+        return ties;
+    }
+
+
+    // REQUIRES: there is a piece at the given location
+    public GamePiece getGamePiece(int column, int height) {
+        return board.get(column - 1).get(height - 1);
+    }
+
+    public ArrayList<GamePiece> getColumn(int column) {
+        return board.get(column - 1);
+    }
+
+    // REQUIRES: column is between 1 and BOARD_WIDTH
     // MODIFIES: this
     // EFFECTS: if the given column (between one and width) is not full,
     // adds given game piece to given column and returns true. Else returns false
@@ -41,6 +69,26 @@ public class GameBoard {
         }
     }
 
+    // EFFECTS: returns true if there are no pieces on the board and false otherwise
+    public boolean isClear() {
+        for (int i = 0; i < BOARD_WIDTH; i++) {
+            if (!board.get(i).isEmpty()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // EFFECTS: returns true if the board is full and false otherwise
+    public boolean isFull() {
+        for (int i = 0; i < BOARD_WIDTH; i++) {
+            if (board.get(i).size() != BOARD_HEIGHT) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     // EFFECTS: returns true if there are 4 in a row of the
     // given (0 for red and 1 for yellow) color and false otherwise
     public boolean checkWin(int color) {
@@ -49,8 +97,46 @@ public class GameBoard {
 
     // EFFECTS: returns true if there are 4 of the given color on a diagonal and false otherwise
     private boolean checkDiagonalWin(int color) {
-        return true; //stub
+        for (int i = 0; i < BOARD_WIDTH - 3; i++) {
+            for (int j = 0; j < BOARD_HEIGHT; j++) {
+                if (board.get(i).size() > j) { // for each piece on the board (except in the last 3 columns)
+                    if (checkWinNextFourRightDiagonal(i, j, color, 1)) {
+                        return true;
+                    }
+                    if (checkWinNextFourRightDiagonal(i, j, color, -1)) {
+                        return true;
+                    }
+                }
+            }
+
+        }
+        return false;
     }
+
+    // REQUIRES: direction = -1 or 1
+    // EFFECTS: return true if the next four pieces above and to the right (if direction is 1) or below and
+    // to the right (if direction is -1) of piece in given column and height are the given color
+    private boolean checkWinNextFourRightDiagonal(int column, int height, int color, int direction) {
+        try {
+            int consecutive = 0;
+            for (int i = 0; i < 4; i++) {
+                for (int j = 0; j < 4; j++) {
+                    if (board.get(column + i).get(height + (direction * j)).getColor() == color) {
+                        consecutive++;
+                        if (consecutive == 4) {
+                            return true; // if there have been 4 pieces in a row of the given color
+                        }
+                    } else {
+                        return false; //if you run into a piece of the wrong color
+                    }
+                }
+            }
+            return false;
+        } catch (Exception e) { // if the four to the right include an empty spot (would give an array out of bounds)
+            return false;
+        }
+    }
+
 
     // EFFECTS: returns true if there are 4 of the given color on top of each other
     private boolean checkVerticalWin(int color) {
@@ -60,7 +146,6 @@ public class GameBoard {
             }
         }
         return false;
-
     }
 
     // EFFECTS: returns true the list of pieces has 4 in a row of the given color
@@ -81,7 +166,69 @@ public class GameBoard {
 
     // EFFECTS: returns true if there are 4 of the given color next to each other
     private boolean checkHorizontalWin(int color) {
-        return true; //stub
+        for (int i = 0; i < BOARD_WIDTH - 3; i++) {
+            for (int j = 0; j < BOARD_HEIGHT; j++) {
+                if (board.get(i).size() > j) { // for each piece on the board (except in the last 3 columns)
+                    if (checkWinNextFourRight(i, j, color)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    // EFFECTS: true if the next four pieces to the right, starting with piece in given column and height, are the
+    // given color
+    private boolean checkWinNextFourRight(int column, int height, int color) {
+        try {
+            int consecutive = 0;
+            for (int i = 0; i < 4; i++) {
+                if (board.get(column + i).get(height).getColor() == color) {
+                    consecutive++;
+                    if (consecutive == 4) {
+                        return true; // if there have been 4 pieces in a row of the given color
+                    }
+                } else {
+                    return false; //if you run into a piece of the wrong color
+                }
+            }
+            return false;
+        } catch (Exception e) { // if the four to the right include an empty spot (would give an array out of bounds)
+            return false;
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: places given piece in a random column
+    public void aiMove(GamePiece gp) {
+        int rand = (int) (Math.random() * 7 + 1);
+        addPiece(rand, gp);
+    }
+
+    // MODIFIES: this
+    // EFFECTS: if a color has won or there is a tie (full board), adds one to their win total,
+    // clears the board, and returns true. Else returns false
+    public boolean checkGameOver() {
+        if (checkWin(YELLOW)) {
+            yellowWins++;
+            clear();
+            return true;
+        }
+
+        if (checkWin(RED)) {
+            redWins++;
+            clear();
+            return true;
+        }
+
+        if (isFull()) {
+            ties++;
+            clear();
+            return true;
+        }
+
+        return false;
     }
 
 
