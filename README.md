@@ -31,7 +31,7 @@ application to my field of study, the simple artificial
 intelligence of the automated oppenent is certainly a step
 toward work that I hope to do in the future.
 
-#User Stories#
+#User Stories
 - As a user, I want to be able to select a one or two player game before each game
 - As a user, I want to be able to toggle between CPU difficulty (may add later)
 - As a user, I want to be able to add a game piece of my own color to any of the allowed spots on the board
