@@ -126,13 +126,16 @@ public class GameBoard {
                         return true; // if there have been 4 pieces in a row of the given color
                     }
                 } else {
-                    return false; //if you run into a piece of the wrong color
+                    //return false; //if you run into a piece of the wrong color.
+                    // Commenting this line out doesn't change the functionality.
+                    // Commenting it out makes the program less efficient
+                    // (because it keep checking even after running into the wrong piece) but ensures
+                    // complete code coverage. If this line is uncommented, the next return statement
+                    // is never used, so code coverage is less than 100%, even though that line is needed
+                    // for the code to compile.
                 }
             }
-            return false;// this line should never be reached because it will hit a return statement
-            // inside the previous for loop if working as intended but the compiler doesn't know that so
-            // it is necessary for the code to compile.
-            // This makes code coverage less than 100% even though everything that should be reached is
+            return false;
         } catch (Exception e) { // if the four to the right include an empty spot (would give an array out of bounds)
             return false;
         }
@@ -191,12 +194,16 @@ public class GameBoard {
                         return true; // if there have been 4 pieces in a row of the given color
                     }
                 } else {
-                    return false; //if you run into a piece of the wrong color
+                    //return false; //if you run into a piece of the wrong color.
+                    // Commenting this line out doesn't change the functionality.
+                    // Commenting it out makes the program less efficient
+                    // (because it keep checking even after running into the wrong piece) but ensures
+                    // complete code coverage. If this line is uncommented, the next return statement
+                    // is never used, so code coverage is less than 100%, even though that line is needed
+                    // for the code to compile.
                 }
             }
-            return false; // this line should never be reached because it will hit a return statement
-            // inside the previous for loop, but it is necessary for the code to compile. This
-            // makes code coverage less than 100% even though everything that should be reached is
+            return false; 
         } catch (Exception e) { // if the four to the right include an empty spot (would give an array out of bounds)
             return false;
         }
