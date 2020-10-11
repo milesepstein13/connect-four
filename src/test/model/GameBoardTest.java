@@ -134,7 +134,6 @@ public class GameBoardTest {
         assertEquals(board.getRedWins(), 0);
         assertTrue(board.checkGameOver());
         assertEquals(board.getRedWins(), 1);
-        assertTrue(board.isClear());
 
     }
 
@@ -147,7 +146,6 @@ public class GameBoardTest {
         assertEquals(board.getYellowWins(), 0);
         assertTrue(board.checkGameOver());
         assertEquals(board.getYellowWins(), 1);
-        assertTrue(board.isClear());
     }
 
     // REQUIRES: board is 7X7
@@ -211,7 +209,6 @@ public class GameBoardTest {
         assertTrue(board.isFull());
         assertTrue(board.checkGameOver());
         assertEquals(board.getTies(), 1);
-        assertTrue(board.isClear());
     }
 
     @Test

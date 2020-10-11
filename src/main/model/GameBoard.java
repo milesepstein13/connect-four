@@ -202,31 +202,28 @@ public class GameBoard {
     }
 
     // MODIFIES: this
-    // EFFECTS: places given piece in a random column
+    // EFFECTS: places given piece in a random not full column
     public void aiMove(GamePiece gp) {
         int rand = (int) (Math.random() * 7 + 1);
         addPiece(rand, gp);
     }
 
     // MODIFIES: this
-    // EFFECTS: if a color has won or there is a tie (full board), adds one to their win total,
-    // clears the board, and returns true. Else returns false
+    // EFFECTS: if a color has won or there is a tie (full board), adds one to their win total and
+    // returns true. Else returns false
     public boolean checkGameOver() {
         if (checkWin(YELLOW)) {
             yellowWins++;
-            clear();
             return true;
         }
 
         if (checkWin(RED)) {
             redWins++;
-            clear();
             return true;
         }
 
         if (isFull()) {
             ties++;
-            clear();
             return true;
         }
 
