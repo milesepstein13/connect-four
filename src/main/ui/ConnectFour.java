@@ -7,6 +7,9 @@ import java.util.Scanner;
 
 import static java.lang.Integer.parseInt;
 
+// Plays game of connect four. It is a 2 player head-to-head game, where players take turns
+// adding game pieces to the board, with the goal of having four of your own pieces in a row
+// along a horizontal, vertical, or diagonal
 public class ConnectFour {
 
     private GameBoard board;

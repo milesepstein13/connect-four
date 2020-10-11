@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+//Tests for GamePiece
 class GamePieceTest {
 
     public static final int RED = 0;

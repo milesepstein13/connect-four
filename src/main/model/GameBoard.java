@@ -2,6 +2,8 @@ package model;
 
 import java.util.ArrayList;
 
+// Represents a board for a game of connect 4. It's a 7X7 grid that you can add red or yellow
+// pieces to. When you add a piece it falls to the bottom of the column.
 public class GameBoard {
 
     public static final int BOARD_WIDTH = 7;
@@ -203,7 +205,7 @@ public class GameBoard {
                     // for the code to compile.
                 }
             }
-            return false; 
+            return false;
         } catch (Exception e) { // if the four to the right include an empty spot (would give an array out of bounds)
             return false;
         }

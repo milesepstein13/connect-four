@@ -1,5 +1,6 @@
 package model;
 
+// A piece for a game of connect four. Is either red or yellow
 public class GamePiece {
 
     public static final int RED = 0;
