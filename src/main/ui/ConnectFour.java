@@ -13,7 +13,7 @@ public class ConnectFour {
     private GamePiece red;
     private GamePiece yellow;
     private boolean playing;
-    String numPlayers;
+    private String numPlayers;
     int nextTurn;
 
     public static final int RED = 0;
@@ -22,7 +22,6 @@ public class ConnectFour {
     public static final int BOARD_WIDTH = 7;
     public static final int BOARD_HEIGHT = 7;
 
-    private int players;
 
     // runs the application
     public ConnectFour() {
@@ -39,21 +38,39 @@ public class ConnectFour {
             while (!board.checkGameOver()) {
                 makeNextMove();
                 printBoard(board);
-                if (board.checkWin(RED)) {
-                    System.out.println("Red Wins!");
-                }
-                if (board.checkWin(YELLOW)) {
-                    System.out.println("YELLOW Wins!");
-                }
+                sayWin();
             }
             board.clear();
+            printWins();
             askPlayAgain();
 
         }
         System.out.println("Thanks for playing!");
     }
 
-    //
+    // EFFECTS: if a color has won, says so
+    private void sayWin() {
+        if (board.checkWin(RED)) {
+            System.out.println("Red Wins!");
+
+        }
+        if (board.checkWin(YELLOW)) {
+            System.out.println("YELLOW Wins!");
+
+        }
+    }
+
+    // EFFECTS: Prints the number of wins and ties for each player
+    private void printWins() {
+        System.out.println("Red has " + Integer.toString(board.getRedWins()) + " wins!");
+        System.out.println("Yellow has " + Integer.toString(board.getYellowWins()) + " wins!");
+        System.out.println("There have been " + Integer.toString(board.getTies()) + " ties!");
+    }
+
+    // MODIFIES: this
+    // EFFECTS: If it is red's turn, lets red make their move and sets next turn to YELLOW.
+    // If it is yellow's turn and 1 player game, makes ai move and if 2 player game lets yellow make their tur
+    // then sets nextTurn to RED
     private void makeNextMove() {
         if (nextTurn == RED) {
             makeNextMove(red);
@@ -63,6 +80,7 @@ public class ConnectFour {
                 makeNextMove(yellow);
             } else {
                 board.aiMove(yellow);
+                System.out.println("AI has made its move!");
             }
             nextTurn = RED;
         }
@@ -75,7 +93,13 @@ public class ConnectFour {
     private void makeNextMove(GamePiece gp) {
         boolean done = false;
         while (!done) {
-            System.out.println("Enter the column number (1-7) where you would like to place your piece");
+            String ask = "";
+            if (nextTurn == RED) {
+                ask += "Red, ";
+            } else {
+                ask += "Yellow, ";
+            }
+            System.out.println(ask + "enter the column number (1-7) where you would like to place your piece.");
             Scanner scanner = new Scanner(System.in);
             int column = parseInt(scanner.nextLine());
             if (column > 0 & column <= BOARD_WIDTH) {
@@ -88,11 +112,8 @@ public class ConnectFour {
     }
 
     // MODIFIES: this
-    // EFFECTS: asks the user to play again and sets playing to false if they don't want to
+    // EFFECTS: Asks the user to play again and sets playing to false if they don't want to
     private void askPlayAgain() {
-        System.out.println("Red has " + Integer.toString(board.getRedWins()) + " wins!");
-        System.out.println("Yellow has " + Integer.toString(board.getYellowWins()) + " wins!");
-        System.out.println("There have been " + Integer.toString(board.getTies()) + " ties!");
         System.out.println("Good Game! Enter \"yes\" to play again and anything else to quit.");
         Scanner scanner = new Scanner(System.in);
         String playAgain = scanner.nextLine();
@@ -102,7 +123,7 @@ public class ConnectFour {
     }
 
     // MODIFIES: this
-    // EFFECTS: gets the number of players from the user
+    // EFFECTS: sets numPlayers to a string "1" or "2" as given by the user
     private void askNumPlayers() {
         System.out.println("Welcome to Connect Four! Enter the number of players (\"1\" or \"2\").");
         boolean ready = false;
@@ -130,17 +151,16 @@ public class ConnectFour {
 
     // EFFECTS: print game board to console
     private void printBoard(GameBoard gb) {
-        String boardString = "";
-        boardString += "_________\n";
+        String boardString = "_________________\n| 1 2 3 4 5 6 7 |\n";
         for (int i = 0; i < BOARD_HEIGHT; i++) {
             boardString += "|";
             for (int j = 0; j < BOARD_WIDTH; j++) {
                 boardString = addPieceToString(boardString, gb, i, j);
             }
-            boardString += "|\n";
+            boardString += " |\n";
 
         }
-        boardString += "---------";
+        boardString += "-----------------";
         System.out.println(boardString);
     }
 
@@ -150,12 +170,12 @@ public class ConnectFour {
     private String addPieceToString(String boardString, GameBoard gb, int i, int j) {
         if (gb.getColumn(j + 1).size() > BOARD_HEIGHT - i - 1) {
             if (gb.getColumn(j + 1).get(BOARD_HEIGHT - i - 1).isRed()) {
-                boardString += "R";
+                boardString += " R";
             } else {
-                boardString += "Y";
+                boardString += " Y";
             }
         } else {
-            boardString += " ";
+            boardString += "  ";
         }
         return boardString;
     }

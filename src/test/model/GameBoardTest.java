@@ -119,6 +119,23 @@ public class GameBoardTest {
     }
 
     @Test
+    public void testAIMoveFullRows(){
+        for (int i = 0; i < BOARD_WIDTH - 1; i++) {
+            for (int j = 0; j < BOARD_HEIGHT; j++) {
+                board.addPiece(i + 1, gp1);
+            }
+        }
+        board.aiMove(gp1);
+        int pieces = 0;
+        for (int i = 0; i < BOARD_WIDTH; i++) {
+            if (board.getColumn(i+1).contains(gp1)){
+                pieces++;
+            }
+        }
+        assertEquals(pieces, 7);
+    }
+
+    @Test
     public void testCheckGameOverNot(){
         board.addPiece(1, gp1);
         board.addPiece(1, gp2);
@@ -150,7 +167,7 @@ public class GameBoardTest {
 
     // REQUIRES: board is 7X7
     // EFFECTS: creates a tie game (full board with no four in a row)
-    public void createTieBoard(GameBoard board) {
+    private void createTieBoard(GameBoard board) {
         createTieBoardCol1(board, 1);
         createTieBoardCol1(board, 2);
         createTieBoardCol2(board, 3);
@@ -162,7 +179,7 @@ public class GameBoardTest {
 
     // REQUIRES: board is 7X7
     // EFFECTS: creates a column of tie game (full board with no four in a row)
-    public void createTieBoardCol1(GameBoard board, int column) {
+    private void createTieBoardCol1(GameBoard board, int column) {
         for (int i = 0; i < BOARD_HEIGHT; i++) {
             if (i == 3) {
                 board.addPiece(column, gp1);
@@ -176,7 +193,7 @@ public class GameBoardTest {
     // REQUIRES: board is 7X7
     // modifies: board
     // EFFECTS: creates a column of tie game (full board with no four in a row)
-    public void createTieBoardCol2(GameBoard board, int column) {
+    private void createTieBoardCol2(GameBoard board, int column) {
         for (int i = 0; i < BOARD_HEIGHT; i++) {
             if (i >= 2 & i <= 4) {
                 board.addPiece(column, gp1);
@@ -189,7 +206,7 @@ public class GameBoardTest {
 
     // REQUIRES: board is 7X7
     // EFFECTS: creates a column of tie game (full board with no four in a row)
-    public void createTieBoardCol3(GameBoard board, int column) {
+    private void createTieBoardCol3(GameBoard board, int column) {
         for (int i = 0; i < BOARD_HEIGHT; i++) {
             if (i != 3) {
                 board.addPiece(column, gp1);

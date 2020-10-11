@@ -130,8 +130,9 @@ public class GameBoard {
                 }
             }
             return false;// this line should never be reached because it will hit a return statement
-            // inside the previous for loop, but it is necessary for the code to compile. This
-            // makes code coverage less than 100% even though everything that should be reached is
+            // inside the previous for loop if working as intended but the compiler doesn't know that so
+            // it is necessary for the code to compile.
+            // This makes code coverage less than 100% even though everything that should be reached is
         } catch (Exception e) { // if the four to the right include an empty spot (would give an array out of bounds)
             return false;
         }
@@ -204,8 +205,14 @@ public class GameBoard {
     // MODIFIES: this
     // EFFECTS: places given piece in a random not full column
     public void aiMove(GamePiece gp) {
-        int rand = (int) (Math.random() * 7 + 1);
-        addPiece(rand, gp);
+        boolean done = false;
+        while (!done) {
+            int rand = (int) (Math.random() * 7 + 1);
+            if (addPiece(rand, gp)) {
+                done = true;
+            }
+        }
+
     }
 
     // MODIFIES: this
