@@ -37,4 +37,5 @@ toward work that I hope to do in the future.
 - As a user, I want to be able to add a game piece of my own color to any of the allowed spots on the board
 - As a user, I want to be able to see when the game is over and be told who won
 - As a user, I want to be able to end the program or restart with the same options when a game is over
-
+- As a user, I want to be able to save a game board
+- As a user, I want to be able to load a saved game board and continue playing
