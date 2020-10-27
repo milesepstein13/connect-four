@@ -1,7 +1,10 @@
 package model;
 
+import org.json.JSONObject;
+import persistance.Writable;
+
 // A piece for a game of connect four. Is either red or yellow
-public class GamePiece {
+public class GamePiece implements Writable {
 
     public static final int RED = 0;
     public static final int YELLOW = 1;
@@ -39,5 +42,13 @@ public class GamePiece {
     //EFFECTS: returns 0 if the piece is red and 1 if the piece is yellow
     public int getColor() {
         return color;
+    }
+
+    @Override
+    // Source: Json Serialization Demo
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("color", color);
+        return json;
     }
 }

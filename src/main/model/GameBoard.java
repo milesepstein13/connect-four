@@ -1,10 +1,14 @@
 package model;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+import persistance.Writable;
+
 import java.util.ArrayList;
 
 // Represents a board for a game of connect 4. It's a 7X7 grid that you can add red or yellow
 // pieces to. When you add a piece it falls to the bottom of the column.
-public class GameBoard {
+public class GameBoard implements Writable {
 
     public static final int BOARD_WIDTH = 7;
     public static final int BOARD_HEIGHT = 7;
@@ -40,6 +44,17 @@ public class GameBoard {
         return ties;
     }
 
+    public void setRedWins(int redWins) {
+        this.redWins = redWins;
+    }
+
+    public void setYellowWins(int yellowWins) {
+        this.yellowWins = yellowWins;
+    }
+
+    public void setTies(int ties) {
+        this.ties = ties;
+    }
 
     // REQUIRES: there is a piece at the given location
     public GamePiece getGamePiece(int column, int height) {
@@ -247,4 +262,36 @@ public class GameBoard {
     }
 
 
+    @Override
+    // Source: Json Serialization Demo
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("redWins", redWins);
+        json.put("yellowWins", yellowWins);
+        json.put("ties", ties);
+        json.put("board", boardToJson());
+        return json;
+    }
+
+    // EFFECTS: returns JSONArray of JSONArrays of pieces (columns)
+    // Source: Json Serialization Demo
+    private JSONArray boardToJson() {
+        JSONArray jsonArray = new JSONArray();
+
+        for (int i = 0; i < BOARD_WIDTH; i++) {
+            jsonArray.put(columnToJson(i));
+        }
+        return jsonArray;
+    }
+
+    // EFFECTS: returns column i as JSONArray of pieces
+    private JSONArray columnToJson(int i) {
+        JSONArray jsonArray = new JSONArray();
+
+        for (GamePiece gp : board.get(i)) {
+            jsonArray.put(gp.toJson());
+        }
+
+        return jsonArray;
+    }
 }

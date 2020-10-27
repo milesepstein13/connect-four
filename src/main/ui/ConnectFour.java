@@ -2,7 +2,11 @@ package ui;
 
 import model.GameBoard;
 import model.GamePiece;
+import persistance.JsonReader;
+import persistance.JsonWriter;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Scanner;
 
 import static java.lang.Integer.parseInt;
@@ -18,7 +22,10 @@ public class ConnectFour {
     private boolean playing;
     private String numPlayers;
     int nextTurn;
+    private JsonWriter jsonWriter;
+    private JsonReader jsonReader;
 
+    private static final String JSON_STORE = "./data/gameboard.json";
     public static final int RED = 0;
     public static final int YELLOW = 1;
 
@@ -58,7 +65,7 @@ public class ConnectFour {
 
         }
         if (board.checkWin(YELLOW)) {
-            System.out.println("YELLOW Wins!");
+            System.out.println("Yellow Wins!");
 
         }
     }
@@ -74,7 +81,7 @@ public class ConnectFour {
     // EFFECTS: If it is red's turn, lets red make their move and sets next turn to YELLOW.
     // If it is yellow's turn and 1 player game, makes ai move and if 2 player game lets yellow make their tur
     // then sets nextTurn to RED
-    private void makeNextMove() {
+    private void makeNextMove() { //add load and save here
         if (nextTurn == RED) {
             makeNextMove(red);
             nextTurn = YELLOW;
@@ -96,22 +103,42 @@ public class ConnectFour {
     private void makeNextMove(GamePiece gp) {
         boolean done = false;
         while (!done) {
-            String ask = "";
+            String ask;
             if (nextTurn == RED) {
-                ask += "Red, ";
+                ask = "Red, ";
             } else {
-                ask += "Yellow, ";
+                ask = "Yellow, ";
             }
             System.out.println(ask + "enter the column number (1-7) where you would like to place your piece.");
+            System.out.println("Enter \"s\" to save or \"l\" to load");
             Scanner scanner = new Scanner(System.in);
-            int column = parseInt(scanner.nextLine());
+            String answer = scanner.nextLine();
+            done = processAnswer(gp, answer);
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: saves or loads the board or places the game piece based on the user's answer
+    private boolean processAnswer(GamePiece gp, String answer) {
+        if (answer.equals("s")) {
+            saveGameBoard();
+            System.out.println("Board Saved!");
+        }
+        if (answer.equals("l")) {
+            loadGameBoard();
+            System.out.println("Board Loaded!");
+        }
+        try {
+            int column = Integer.parseInt(answer);
             if (column > 0 & column <= BOARD_WIDTH) {
                 if (board.addPiece(column, gp)) {
-                    done = true;
+                    return true;
                 }
             }
+        } catch (Exception e) {
+            System.out.println("Invalid input");
         }
-
+        return false;
     }
 
     // MODIFIES: this
@@ -150,6 +177,8 @@ public class ConnectFour {
         yellow = new GamePiece(YELLOW);
         playing = true;
         nextTurn = RED;
+        jsonWriter = new JsonWriter(JSON_STORE);
+        jsonReader = new JsonReader(JSON_STORE);
     }
 
     // EFFECTS: print game board to console
@@ -181,5 +210,30 @@ public class ConnectFour {
             boardString += "  ";
         }
         return boardString;
+    }
+
+    // EFFECTS: saves the gameboard to file
+    // Source: Json serialization demo
+    private void saveGameBoard() {
+        try {
+            jsonWriter.open();
+            jsonWriter.write(board);
+            jsonWriter.close();
+            System.out.println("Saved board to " + JSON_STORE);
+        } catch (FileNotFoundException e) {
+            System.out.println("Unable to write to file: " + JSON_STORE);
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: loads gameboard from file
+    // Source: Json serialization demo
+    private void loadGameBoard() {
+        try {
+            board = jsonReader.read();
+            System.out.println("Loaded board from " + JSON_STORE);
+        } catch (IOException e) {
+            System.out.println("Unable to read from file: " + JSON_STORE);
+        }
     }
 }
