@@ -46,11 +46,15 @@ public class JsonReader {
         int redWins = jsonObject.getInt("redWins");
         int yellowWins = jsonObject.getInt("yellowWins");
         int ties = jsonObject.getInt("ties");
+        int numPlayers = jsonObject.getInt("numPlayers");
+        boolean turn = jsonObject.getBoolean("turn");
         GameBoard gb = new GameBoard();
         setBoard(gb, jsonObject);
         gb.setRedWins(redWins);
         gb.setYellowWins(yellowWins);
         gb.setTies(ties);
+        gb.setNumPlayers(numPlayers);
+        gb.setTurn(turn);
         return gb;
     }
 

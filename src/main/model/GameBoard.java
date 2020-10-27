@@ -15,9 +15,12 @@ public class GameBoard implements Writable {
     public static final int RED = 0;
     public static final int YELLOW = 1;
 
+
     private int redWins;
     private int yellowWins;
     private int ties;
+    private boolean turn;
+    private int numPlayers;
     private ArrayList<ArrayList<GamePiece>> board;
 
     // MODIFIES: this
@@ -30,6 +33,8 @@ public class GameBoard implements Writable {
         }
         redWins = 0;
         yellowWins = 0;
+        ties = 0;
+        numPlayers = 0;
     }
 
     public int getRedWins() {
@@ -42,6 +47,26 @@ public class GameBoard implements Writable {
 
     public int getTies() {
         return ties;
+    }
+
+    public boolean getTurn() {
+        return turn;
+    }
+
+    public int getNumPlayers() {
+        return numPlayers;
+    }
+
+    public void setNumPlayers(int numPlayers) {
+        this.numPlayers = numPlayers;
+    }
+
+    public void setTurn(boolean turn) {
+        this.turn = turn;
+    }
+
+    public void switchTurn() {
+        turn = !turn;
     }
 
     public void setRedWins(int redWins) {
@@ -269,6 +294,8 @@ public class GameBoard implements Writable {
         json.put("redWins", redWins);
         json.put("yellowWins", yellowWins);
         json.put("ties", ties);
+        json.put("turn", turn);
+        json.put("numPlayers", numPlayers);
         json.put("board", boardToJson());
         return json;
     }

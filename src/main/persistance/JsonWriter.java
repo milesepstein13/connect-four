@@ -6,7 +6,7 @@ import org.json.JSONObject;
 
 import java.io.*;
 
-// Represents a writer that writes JSON representation of workroom to file
+// Represents a writer that writes JSON representation of gameboard to file
 // Source: Json Serialization Demo
 public class JsonWriter {
     private static final int TAB = 4;
