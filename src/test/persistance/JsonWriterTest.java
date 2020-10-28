@@ -7,9 +7,7 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.util.List;
 
-import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 // Source: JSON Serialization Demo
 public class JsonWriterTest extends JsonTest {

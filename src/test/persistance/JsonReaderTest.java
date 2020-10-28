@@ -2,14 +2,9 @@ package persistance;
 
 import model.GameBoard;
 import org.junit.Test;
-import org.junit.jupiter.api.Assertions;
-
+import static org.junit.jupiter.api.Assertions.*;
 import java.io.IOException;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.fail;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 // Source: JSON Serialization Demo
 public class JsonReaderTest extends JsonTest {
@@ -43,7 +38,7 @@ public class JsonReaderTest extends JsonTest {
             assertEquals(gb.getTies(), 0);
 
         } catch (IOException e) {
-            Assertions.fail("Couldn't read from file");
+            fail("Couldn't read from file");
         }
     }
 
@@ -66,7 +61,7 @@ public class JsonReaderTest extends JsonTest {
 
 
         } catch (IOException e) {
-            Assertions.fail("Couldn't read from file");
+            fail("Couldn't read from file");
         }
     }
 }
