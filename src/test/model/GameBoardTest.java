@@ -31,6 +31,7 @@ public class GameBoardTest {
 
     @Test
     public void testSwitchTurnRTY() {
+        board.setTurn(RED_TURN);
         assertTrue(board.getTurn());
         board.switchTurn();
         assertFalse(board.getTurn());
