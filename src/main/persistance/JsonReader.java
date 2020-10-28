@@ -70,7 +70,7 @@ public class JsonReader {
         }
     }
 
-    // EFFECTS:
+    // EFFECTS: gb
     // Adds each game piece from the json array column into given column of gb
     private void addColumn(GameBoard gb, JSONArray jsonArray, int column) {
         for (Object json: jsonArray) {
@@ -78,7 +78,6 @@ public class JsonReader {
         }
     }
 
-    // MODIFIES
     // EFFECTS: parses gamepiece from JSON object
     private GamePiece parseGamePiece(Object pieceObject) {
         JSONObject jsonPiece = (JSONObject) pieceObject;

@@ -81,7 +81,7 @@ public class GameBoard implements Writable {
         this.ties = ties;
     }
 
-    // REQUIRES: there is a piece at the given location
+    // REQUIRES: there is a piece at given column and height (starting from 1, 1)
     public GamePiece getGamePiece(int column, int height) {
         return board.get(column - 1).get(height - 1);
     }
@@ -289,6 +289,7 @@ public class GameBoard implements Writable {
 
     @Override
     // Source: Json Serialization Demo
+    // EFFECTS: returns this as a JSONObject
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
         json.put("redWins", redWins);

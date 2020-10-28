@@ -50,6 +50,7 @@ public class ConnectFour {
             printWins();
             playing = true;
             board.setNumPlayers(0);
+            board.setTurn(RED_TURN);
             askPlayAgain();
 
         }
@@ -219,6 +220,7 @@ public class ConnectFour {
         System.out.println(boardString);
     }
 
+    // MODIFIES: boardString
     // REQUIRES: i and j are between 0 and board height/width respectively
     // EFFECTS: adds a "Y" to board string if the piece in row i (from top) and column j is yellow,
     // "R" if red, and a space if it doesn't exist
