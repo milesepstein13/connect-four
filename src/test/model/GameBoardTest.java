@@ -14,6 +14,8 @@ public class GameBoardTest {
 
     public static final int BOARD_WIDTH = 7;
     public static final int BOARD_HEIGHT = 7;
+    public static final boolean RED_TURN = true;
+    public static final boolean YELLOW_TURN = false;
 
     GamePiece gp1;
     GamePiece gp2;
@@ -25,6 +27,22 @@ public class GameBoardTest {
         gp1 = new GamePiece(RED);
         gp2 = new GamePiece(YELLOW);
         board = new GameBoard();
+    }
+
+    @Test
+    public void testSwitchTurnRTY() {
+        assertTrue(board.getTurn());
+        board.switchTurn();
+        assertFalse(board.getTurn());
+    }
+
+    @Test
+    public void testSwitchTurnYTR() {
+
+        board.setTurn(YELLOW_TURN);
+        assertFalse(board.getTurn());
+        board.switchTurn();
+        assertTrue(board.getTurn());
     }
 
     @Test
