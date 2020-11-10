@@ -12,6 +12,7 @@ import java.nio.file.Paths;
 import java.util.stream.Stream;
 
 // Source: Json Serialization Demo
+// Reads a json representation of a board and turns it into a board
 public class JsonReader {
     private static final int BOARD_WIDTH = 7;
     private static final int BOARD_HEIGHT = 7;
