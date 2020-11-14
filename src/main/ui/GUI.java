@@ -145,12 +145,40 @@ public class GUI extends JFrame implements ActionListener {
         return infoDisplay;
     }
 
+    private void updateDisplay() {
+        updateInfoDisplay();
+        updateBoardDisplay();
+    }
+
+    private void updateBoardDisplay() {
+        for (int i = 0; i < BOARD_WIDTH; i++) {
+            for (int j = 0; j < board.getColumn(i + 1).size(); j++) {
+                if (board.getGamePiece(i + 1, j + 1).isRed()) {
+                    spots.get(i).get(j).setText("RED");
+                } else {
+                    spots.get(i).get(j).setText("YELLOW");
+                }
+            }
+        }
+    }
+
+    private void updateInfoDisplay() {
+        String displayString = "Red Wins: " + board.getRedWins() + "\nYellow Wins: " + board.getYellowWins();
+        displayString = displayString + "\nTies: " + board.getTies() + "\nNumber of Players: " + board.getNumPlayers();
+        if (board.getTurn()) {
+            displayString = displayString + "\nTurn: Red";
+        } else {
+            displayString = displayString + "\nTurn: Yellow";
+        }
+        infoDisplay.setText(displayString);
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("load")) {
             infoDisplay.setText("this is how event handling works!");
         } else {
-            infoDisplay.setText("hiiiii");
+            updateDisplay();
         }
     }
 }
