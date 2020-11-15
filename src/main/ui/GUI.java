@@ -11,7 +11,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
+
+import static java.lang.Thread.sleep;
 
 // Plays game of connect four in a popup. IIt is a 2 player head-to-head game, where players take turns
 // adding game pieces to the board, with the goal of having four of your own pieces in a row
@@ -48,14 +52,8 @@ public class GUI extends JFrame implements ActionListener {
         initializeFields();
         initializeGraphics();
         //initializeSound();
-        initializeInteraction();
     }
 
-    // MODIFIES: this
-    // EFFECTS: creates mouse listener
-    private void initializeInteraction() {
-
-    }
 
     // MODIFIES: this
     // EFFECTS: initializes graphics
@@ -65,7 +63,7 @@ public class GUI extends JFrame implements ActionListener {
         setLocationRelativeTo(null);
         setVisible(true);
         addVisuals();
-
+        updateDisplay();
     }
 
     private void addVisuals() {
@@ -126,7 +124,7 @@ public class GUI extends JFrame implements ActionListener {
         for (int i = 0; i < BOARD_WIDTH; i++) {
             String columnString = Integer.toString(i + 1);
             DropperButton dropper = new DropperButton(columnString, this);
-            dropper.setActionCommand("dropper " + Integer.toString(i));
+            dropper.setActionCommand(Integer.toString(i));
             dropper.addActionListener(this);
             droppers.add(dropper);
         }
@@ -152,12 +150,17 @@ public class GUI extends JFrame implements ActionListener {
 
     private void updateBoardDisplay() {
         for (int i = 0; i < BOARD_WIDTH; i++) {
-            for (int j = 0; j < board.getColumn(i + 1).size(); j++) {
-                if (board.getGamePiece(i + 1, j + 1).isRed()) {
-                    spots.get(i).get(j).setText("RED");
+            for (int j = 0; j < BOARD_HEIGHT; j++) {
+                if (j < board.getColumn(i + 1).size()) {
+                    if (board.getGamePiece(i + 1, j + 1).isRed()) {
+                        spots.get(i).get(j).setText("RED");
+                    } else {
+                        spots.get(i).get(j).setText("YELLOW");
+                    }
                 } else {
-                    spots.get(i).get(j).setText("YELLOW");
+                    spots.get(i).get(j).setText("empty");
                 }
+
             }
         }
     }
@@ -176,9 +179,82 @@ public class GUI extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("load")) {
-            infoDisplay.setText("this is how event handling works!");
+            loadBoard();
+        } else if (e.getActionCommand().equals("save")) {
+            saveBoard();
+        } else if (e.getActionCommand().equals("switch")) {
+            switchNumPlayers();
+        } else { //a column button was pressed
+            if (playerMakeMove(e.getActionCommand())) {
+                process();
+            }
+        }
+        updateDisplay();
+    }
+
+    private void process() {
+        if (board.checkGameOver()) {
+            board.clear();
+        } else if (!board.getTurn() && board.getNumPlayers() == 1) {
+            board.aiMove(yellow);
+            board.switchTurn();
+            if (board.checkGameOver()) {
+                board.clear();
+            }
+        }
+    }
+
+    private Boolean playerMakeMove(String actionCommand) {
+        int column = Integer.parseInt(actionCommand) + 1;
+        GamePiece gp;
+        if (board.getTurn()) {
+            gp = red;
         } else {
-            updateDisplay();
+            gp = yellow;
+        }
+        if (board.addPiece(column, gp)) {
+            board.switchTurn();
+            return true;
+        }
+        return false;
+    }
+
+    private void loadBoard() {
+        try {
+            board = jsonReader.read();
+            System.out.println("Loaded board from " + JSON_STORE);
+            System.out.println("Board Loaded!" + board.getColumn(1).size());
+        } catch (IOException ex) {
+            System.out.println("Unable to read from file: " + JSON_STORE);
+        }
+
+    }
+
+    //switches the number of players. If it switches to one player and it's yellow turn, the ai goes
+    private void switchNumPlayers() {
+        if (board.getNumPlayers() == 1) {
+            board.setNumPlayers(2);
+        } else {
+            board.setNumPlayers(1);
+            if (!board.getTurn() && board.getNumPlayers() == 1) {
+                board.aiMove(yellow);
+                board.switchTurn();
+                if (board.checkGameOver()) {
+                    board.clear();
+                }
+            }
+        }
+    }
+
+    private void saveBoard() {
+        try {
+            jsonWriter.open();
+            jsonWriter.write(board);
+            jsonWriter.close();
+            System.out.println("Saved board to " + JSON_STORE);
+            System.out.println("Board Saved!" + board.getColumn(1).size());
+        } catch (FileNotFoundException exc) {
+            System.out.println("Unable to write to file: " + JSON_STORE);
         }
     }
 }
