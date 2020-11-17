@@ -1,9 +1,12 @@
 package ui;
 
+import java.awt.*;
+
 // Runs application
 public class Main {
     public static void main(String[] args) {
-        new GUI();
-        new ConnectFour();
+        new GUI(); // to run in popup
+        // new ConnectFour(); // to run in console
+
     }
 }

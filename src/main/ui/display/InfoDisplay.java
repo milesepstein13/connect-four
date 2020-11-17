@@ -1,9 +1,14 @@
 package ui.display;
 
 import javax.swing.*;
+import java.awt.*;
 
-public class InfoDisplay extends JLabel {
+public class InfoDisplay extends JTextArea {
+
+    // A text area that displays information about the state of the game
     public InfoDisplay() {
-        super("info will go here on update board");
+        super();
+        setFont(new Font("Arial", Font.BOLD, 30));
+        setSize(100, 500);
     }
 }
