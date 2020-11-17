@@ -127,7 +127,7 @@ public class GUI extends JFrame implements ActionListener {
         for (int i = 0; i < BOARD_WIDTH; i++) {
             ArrayList<Spot> column = new ArrayList<>();
             for (int j = 0; j < GameBoard.BOARD_HEIGHT; j++) {
-                Spot s = new Spot();
+                Spot s = new Spot(this);
                 column.add(s);
             }
             spots.add(column);

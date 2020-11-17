@@ -1,5 +1,7 @@
 package ui.display;
 
+import ui.GUI;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.font.FontRenderContext;
@@ -19,12 +21,14 @@ public class Spot extends JPanel {
     public static final int RED = 0;
     public static final int YELLOW = 1;
     public static final int BLANK = -1;
+    public GUI gui;
 
     Color color;
 
-    public Spot() {
+    public Spot(GUI gui) {
         setSize(30, 30);
         repaint();
+        this.gui = gui;
     }
 
     // MODIFIES: this
@@ -32,9 +36,9 @@ public class Spot extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.setColor(Color.BLUE);
-        g.fillRect(0, 0, 100, 100);
+        g.fillRect(0, 0, gui.getWidth() / 10,gui.getHeight() / 8);
         g.setColor(color);
-        g.fillOval(10, 10, 60, 60);
+        g.fillOval(10, 10, gui.getWidth() / 16, gui.getWidth() / 16);
     }
 
     // MODIFIES: this

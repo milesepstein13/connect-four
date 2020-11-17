@@ -9,6 +9,7 @@ public class InfoDisplay extends JTextArea {
     public InfoDisplay() {
         super();
         setFont(new Font("Arial", Font.BOLD, 30));
+        setEditable(false);
         setSize(100, 500);
     }
 }
