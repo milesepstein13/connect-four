@@ -4,18 +4,11 @@ import ui.GUI;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.font.FontRenderContext;
-import java.awt.font.GlyphVector;
-import java.awt.geom.AffineTransform;
-import java.awt.image.BufferedImage;
-import java.awt.image.BufferedImageOp;
-import java.awt.image.ImageObserver;
-import java.awt.image.RenderedImage;
-import java.awt.image.renderable.RenderableImage;
-import java.text.AttributedCharacterIterator;
-import java.util.Map;
 
-// a panel in the frame that shows a colored circle on a blue background, creating a visual for a game piece
+
+// a panel in the frame that shows a colored circle on a blue background,
+// creating a visual for a game piece. Has refers to the gui so that it can be the
+// appropriate size
 public class Spot extends JPanel {
 
     public static final int RED = 0;
@@ -36,9 +29,9 @@ public class Spot extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.setColor(Color.BLUE);
-        g.fillRect(0, 0, gui.getWidth() / 10,gui.getHeight() / 8);
+        g.fillRect(0, 0, (gui.getWidth() - 400) / 6,gui.getHeight() / 8);
         g.setColor(color);
-        g.fillOval(10, 10, gui.getWidth() / 16, gui.getWidth() / 16);
+        g.fillOval(10, 10, (gui.getWidth() - 400) / 9, (gui.getWidth() - 400) / 9);
     }
 
     // MODIFIES: this
