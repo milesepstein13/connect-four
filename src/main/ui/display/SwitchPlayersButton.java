@@ -9,14 +9,13 @@ import java.awt.event.ActionListener;
 
 public class SwitchPlayersButton extends JButton {
 
-    private GUI gui;
 
     // the button that switches the number of players
-    public SwitchPlayersButton(GUI gui) {
+    public SwitchPlayersButton() {
         super("Switch Number of Players");
         setFont(new Font("Arial", Font.BOLD, 30));
         setSize(100, 100);
-        this.gui = gui;
+
     }
 
 

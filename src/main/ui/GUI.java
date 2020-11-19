@@ -139,19 +139,19 @@ public class GUI extends JFrame implements ActionListener {
     private void initializeButtons() {
         for (int i = 0; i < BOARD_WIDTH; i++) {
             String columnString = Integer.toString(i + 1);
-            DropperButton dropper = new DropperButton(columnString, this);
+            DropperButton dropper = new DropperButton(columnString);
             dropper.setActionCommand(Integer.toString(i));
             dropper.addActionListener(this);
             dropper.setSize(50, 50);
             droppers.add(dropper);
         }
-        loadButton = new LoadButton(this);
+        loadButton = new LoadButton();
         loadButton.setActionCommand("load");
         loadButton.addActionListener(this);
-        saveButton = new SaveButton(this);
+        saveButton = new SaveButton();
         saveButton.setActionCommand("save");
         saveButton.addActionListener(this);
-        switchPlayersButton = new SwitchPlayersButton(this);
+        switchPlayersButton = new SwitchPlayersButton();
         switchPlayersButton.setActionCommand("switch");
         switchPlayersButton.addActionListener(this);
     }
@@ -184,7 +184,6 @@ public class GUI extends JFrame implements ActionListener {
                 } else {
                     spots.get(i).get(j).update(BLANK);
                 }
-
             }
         }
     }
@@ -216,6 +215,7 @@ public class GUI extends JFrame implements ActionListener {
             switchNumPlayers();
         } else { //a column button was pressed
             if (playerMakeMove(e.getActionCommand())) {
+                updateDisplay();
                 process();
             } else { // beeps if you can't move there
                 Toolkit.getDefaultToolkit().beep();

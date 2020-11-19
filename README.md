@@ -33,9 +33,14 @@ toward work that I hope to do in the future.
 
 #User Stories
 - As a user, I want to be able to select a one or two player game before each game
-- As a user, I want to be able to toggle between CPU difficulty (may add later)
 - As a user, I want to be able to add a game piece of my own color to any of the allowed spots on the board
 - As a user, I want to be able to see when the game is over and be told who won
 - As a user, I want to be able to end the program or restart with the same options when a game is over
 - As a user, I want to be able to save a game board
 - As a user, I want to be able to load a saved game board and continue playing
+
+#User stories for GUI
+- As a user, I want to be able to select a one or two player game at any time
+- As a user, I want to be able to add a game piece of my own color to any of the allowed spots on the board
+- As a user, I want to hear an auditory indication when a game is over and see a tally of total wins for each player
+- As a user, I want to be able to load and save the state of the application
