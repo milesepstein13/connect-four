@@ -250,13 +250,13 @@ public class GameBoardTest {
 
     @Test
     public void testCheckWinNoWin() {
-        assertFalse(board.checkWin(RED));
+        assertEquals(board.checkWin(RED, 4), 0);
     }
 
     @Test
     public void testCheckWinTieFullBoard() {
         createTieBoard(board);
-        assertFalse(board.checkWin(RED));
+        assertEquals(board.checkWin(RED, 4), 0);
     }
 
     @Test
@@ -274,12 +274,12 @@ public class GameBoardTest {
         board.addPiece(4, gp1);
         board.addPiece(5, gp1);
         board.addPiece(6, gp1);
-        assertFalse(board.checkWin(YELLOW));
+        assertEquals(board.checkWin(YELLOW, 4), 0);
     }
 
     @Test
     public void testCheckWinHorizontal() {
-        assertFalse(board.checkWin(RED));
+        assertEquals(board.checkWin(RED, 4), 0);
         board.addPiece(1, gp1);
         board.addPiece(2, gp2);
         board.addPiece(3, gp1);
@@ -293,7 +293,7 @@ public class GameBoardTest {
         board.addPiece(4, gp1);
         board.addPiece(5, gp1);
         board.addPiece(6, gp1);
-        assertTrue(board.checkWin(RED));
+        assertEquals(board.checkWin(RED, 4), 1);
     }
 
     @Test
@@ -309,7 +309,7 @@ public class GameBoardTest {
         board.addPiece(7, gp2);
         board.addPiece(7, gp2);
         board.addPiece(7, gp2);
-        assertTrue(board.checkWin(YELLOW));
+        assertEquals(board.checkWin(YELLOW, 4), 1);
     }
 
     @Test
@@ -333,7 +333,7 @@ public class GameBoardTest {
         board.addPiece(7, gp2);
         board.addPiece(7, gp1);
         board.addPiece(7, gp2);
-        assertTrue(board.checkWin(YELLOW));
+        assertEquals(board.checkWin(YELLOW, 4), 1);
     }
 
     @Test
@@ -357,7 +357,7 @@ public class GameBoardTest {
         board.addPiece(7, gp2);
         board.addPiece(7, gp2);
         board.addPiece(7, gp2);
-        assertTrue(board.checkWin(RED));
+        assertEquals(board.checkWin(RED, 4), 1);
     }
 
     @Test
@@ -381,8 +381,8 @@ public class GameBoardTest {
         board.addPiece(7, gp2);
         board.addPiece(7, gp2);
         board.addPiece(7, gp2);
-        assertTrue(board.checkWin(RED));
-        assertTrue(board.checkWin(YELLOW));
+        assertEquals(board.checkWin(RED, 4), 1);
+        assertEquals(board.checkWin(YELLOW, 4), 2);
     }
 
 }

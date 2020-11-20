@@ -131,41 +131,42 @@ public class GameBoard implements Writable {
         return true;
     }
 
-    // EFFECTS: returns true if there are 4 in a row of the
-    // given (0 for red and 1 for yellow) color and false otherwise
-    public boolean checkWin(int color) {
-        return checkHorizontalWin(color) | checkVerticalWin(color) | checkDiagonalWin(color);
+    // EFFECTS: returns the number of instances on the board that the given
+    // given (0 for red and 1 for yellow) color has number pieces in a row
+    public int checkWin(int color, int number) {
+        return checkHorizontalWin(color, number) + checkVerticalWin(color, number) + checkDiagonalWin(color, number);
     }
 
-    // EFFECTS: returns true if there are 4 of the given color on a diagonal and false otherwise
-    private boolean checkDiagonalWin(int color) {
-        for (int i = 0; i < BOARD_WIDTH - 3; i++) {
+    // EFFECTS: returns the number of instances there are number of the given color on a diagonal and false otherwise
+    private int checkDiagonalWin(int color, int number) {
+        int acc = 0;
+        for (int i = 0; i < BOARD_WIDTH; i++) {
             for (int j = 0; j < BOARD_HEIGHT; j++) {
-                if (board.get(i).size() > j) { // for each piece on the board (except in the last 3 columns)
-                    if (checkWinNextFourRightDiagonal(i, j, color, 1)) {
-                        return true;
+                if (board.get(i).size() > j) { // for each piece on the board
+                    if (checkWinNextFourRightDiagonal(i, j, color, 1, number)) {
+                        acc++;
                     }
-                    if (checkWinNextFourRightDiagonal(i, j, color, -1)) {
-                        return true;
+                    if (checkWinNextFourRightDiagonal(i, j, color, -1, number)) {
+                        acc++;
                     }
                 }
             }
 
         }
-        return false;
+        return acc;
     }
 
     // REQUIRES: direction = -1 or 1
-    // EFFECTS: return true if the next four pieces above and to the right (if direction is 1) or below and
+    // EFFECTS: return true if the next number pieces above and to the right (if direction is 1) or below and
     // to the right (if direction is -1) of piece in given column and height are the given color
-    private boolean checkWinNextFourRightDiagonal(int column, int height, int color, int direction) {
+    private boolean checkWinNextFourRightDiagonal(int column, int height, int color, int direction, int number) {
         try {
             int consecutive = 0;
-            for (int i = 0; i < 4; i++) {
+            for (int i = 0; i < number; i++) {
                 if (board.get(column + i).get(height + (direction * i)).getColor() == color) {
                     consecutive++;
-                    if (consecutive == 4) {
-                        return true; // if there have been 4 pieces in a row of the given color
+                    if (consecutive == number) {
+                        return true; // if there have been number pieces in a row of the given color
                     }
                 } else {
                     //return false; //if you run into a piece of the wrong color.
@@ -184,56 +185,58 @@ public class GameBoard implements Writable {
     }
 
 
-    // EFFECTS: returns true if there are 4 of the given color on top of each other
-    private boolean checkVerticalWin(int color) {
+    // EFFECTS: returns the number of instances there are number of the given color on top of each other
+    private int checkVerticalWin(int color, int number) {
+        int acc = 0;
         for (int i = 0; i < BOARD_WIDTH; i++) {
-            if (checkWinColumn(board.get(i), color)) {
-                return true;
-            }
+            acc += checkWinColumn(board.get(i), color, number);
+
         }
-        return false;
+        return acc;
     }
 
-    // EFFECTS: returns true the list of pieces has 4 in a row of the given color
-    private boolean checkWinColumn(ArrayList<GamePiece> column, int color) {
+    // EFFECTS: returns the number of instances there are number color consecutive pieces in a column
+    private int checkWinColumn(ArrayList<GamePiece> column, int color, int number) {
         int consecutive = 0; // number of consecutive pieces seen so far
+        int acc = 0; //number of instances of number pieces
         for (int i = 0; i < column.size(); i++) {
             if (column.get(i).getColor() == color) { // the next piece is the right color
                 consecutive++;
-                if (consecutive == 4) { // the last 4 pieces have been the right color
-                    return true;
+                if (consecutive >= number) { // the last 4 pieces have been the right color
+                    acc++;
                 }
             } else { // the next piece is the wrong color
                 consecutive = 0;
             }
         }
-        return false;
+        return acc;
     }
 
-    // EFFECTS: returns true if there are 4 of the given color next to each other
-    private boolean checkHorizontalWin(int color) {
-        for (int i = 0; i < BOARD_WIDTH - 3; i++) {
+    // EFFECTS: returns the number of instances there are number of the given color next to each other
+    private int checkHorizontalWin(int color, int number) {
+        int acc = 0;
+        for (int i = 0; i < BOARD_WIDTH - (7 - number); i++) {
             for (int j = 0; j < BOARD_HEIGHT; j++) {
                 if (board.get(i).size() > j) { // for each piece on the board (except in the last 3 columns)
-                    if (checkWinNextFourRight(i, j, color)) {
-                        return true;
+                    if (checkWinNextNumberRight(i, j, color, number)) {
+                        acc++;
                     }
                 }
             }
         }
-        return false;
+        return acc;
     }
 
-    // EFFECTS: true if the next four pieces to the right, starting with piece in given column and height, are the
+    // EFFECTS: true if the next number pieces to the right, starting with piece in given column and height, are the
     // given color
-    private boolean checkWinNextFourRight(int column, int height, int color) {
+    private boolean checkWinNextNumberRight(int column, int height, int color, int number) {
         try {
             int consecutive = 0;
-            for (int i = 0; i < 4; i++) {
+            for (int i = 0; i < number; i++) {
                 if (board.get(column + i).get(height).getColor() == color) {
                     consecutive++;
-                    if (consecutive == 4) {
-                        return true; // if there have been 4 pieces in a row of the given color
+                    if (consecutive == number) {
+                        return true; // if there have been n pieces in a row of the given color
                     }
                 } else {
                     //return false; //if you run into a piece of the wrong color.
@@ -268,12 +271,12 @@ public class GameBoard implements Writable {
     // EFFECTS: if a color has won or there is a tie (full board), adds one to their win total and
     // returns true. Else returns false
     public boolean checkGameOver() {
-        if (checkWin(YELLOW)) {
+        if (checkWin(YELLOW, 4) > 0) {
             yellowWins++;
             return true;
         }
 
-        if (checkWin(RED)) {
+        if (checkWin(RED, 4) > 0) {
             redWins++;
             return true;
         }

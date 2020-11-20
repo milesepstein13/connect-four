@@ -59,11 +59,11 @@ public class ConnectFour {
 
     // EFFECTS: if a color has won, says so
     private void sayWin() {
-        if (board.checkWin(RED)) {
+        if (board.checkWin(RED, 4) > 0) {
             System.out.println("Red Wins!");
 
         }
-        if (board.checkWin(YELLOW)) {
+        if (board.checkWin(YELLOW, 4) > 0) {
             System.out.println("Yellow Wins!");
 
         }
