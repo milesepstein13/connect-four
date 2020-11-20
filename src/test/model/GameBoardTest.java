@@ -407,4 +407,34 @@ public class GameBoardTest {
         assertEquals(board.checkConsecutive(RED, 4), 12);
     }
 
+    @Test
+    public void testSmartAI() {
+        board.addPiece(4, gp1);
+        assertEquals(board.getColumn(4).size(), 1);
+        board.smartAIMove();
+        assertEquals(board.getColumn(4).size(), 2);
+        assertTrue(board.getColumn(4).get(1).isYellow());
+    }
+
+    @Test
+    public void testSmartAISelf() {
+        board.addPiece(4, gp2);
+        assertEquals(board.getColumn(4).size(), 1);
+        board.smartAIMove();
+        assertEquals(board.getColumn(4).size(), 2);
+        assertTrue(board.getColumn(4).get(1).isYellow());
+    }
+
+    @Test
+    public void testSmartAIEmpty() {
+        board.smartAIMove();
+        int acc = 0;
+        for (int i = 0; i < BOARD_WIDTH; i++) {
+            if (!board.getColumn(i + 1).isEmpty()) {
+                acc++;
+            }
+        }
+        assertEquals(acc, 1);
+    }
+
 }

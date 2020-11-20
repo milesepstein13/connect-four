@@ -245,6 +245,7 @@ public class GUI extends JFrame implements ActionListener {
         //beeps and pauses when you win
         Toolkit.getDefaultToolkit().beep();
         try {
+            repaint();
             sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();

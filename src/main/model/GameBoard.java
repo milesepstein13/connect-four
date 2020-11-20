@@ -275,7 +275,7 @@ public class GameBoard implements Writable {
     // English explanation of strategy:
     // If it can get 4 in a row it goes there. Otherwise, if it can block you from getting four
     // in a row it goes there. Otherwise if it can get 3 in a row it goes there. Otherwise,
-    // if it can block you from getting 3 in a row it goes there. And so on
+    // if it can block you from getting 3 in a row it goes there. And so on with 2 and 1
     //
     // It's a basic strategy but is pretty hard to beat because it's never going to miss anything
     // It can't think multiple turns ahead, though, so you can still beat if you think ahead
