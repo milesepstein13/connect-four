@@ -59,11 +59,11 @@ public class ConnectFour {
 
     // EFFECTS: if a color has won, says so
     private void sayWin() {
-        if (board.checkWin(RED, 4) > 0) {
+        if (board.checkConsecutive(RED, 4) > 0) {
             System.out.println("Red Wins!");
 
         }
-        if (board.checkWin(YELLOW, 4) > 0) {
+        if (board.checkConsecutive(YELLOW, 4) > 0) {
             System.out.println("Yellow Wins!");
 
         }
@@ -115,7 +115,7 @@ public class ConnectFour {
                 printBoard(board);
                 makeNextMove(yellow);
             } else {
-                board.aiMove(yellow);
+                board.smartAIMove();
                 System.out.println("AI has made its move!");
 
 

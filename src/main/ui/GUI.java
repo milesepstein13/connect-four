@@ -231,7 +231,7 @@ public class GUI extends JFrame implements ActionListener {
         if (board.checkGameOver()) {
             endGame();
         } else if (!board.getTurn() && board.getNumPlayers() == 1) {
-            board.aiMove(yellow);
+            board.smartAIMove();
             board.switchTurn();
             if (board.checkGameOver()) {
                 endGame();
@@ -281,7 +281,7 @@ public class GUI extends JFrame implements ActionListener {
         } else {
             board.setNumPlayers(1);
             if (!board.getTurn() && board.getNumPlayers() == 1) {
-                board.aiMove(yellow);
+                board.smartAIMove();
                 board.switchTurn();
                 if (board.checkGameOver()) {
                     board.clear();

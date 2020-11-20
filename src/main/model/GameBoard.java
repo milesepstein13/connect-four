@@ -131,12 +131,14 @@ public class GameBoard implements Writable {
         return true;
     }
 
+    // REQUIRES: color = 0 or 1, 0<number<8
     // EFFECTS: returns the number of instances on the board that the given
     // given (0 for red and 1 for yellow) color has number pieces in a row
-    public int checkWin(int color, int number) {
+    public int checkConsecutive(int color, int number) {
         return checkHorizontalWin(color, number) + checkVerticalWin(color, number) + checkDiagonalWin(color, number);
     }
 
+    // REQUIRES: color = 0 or 1, 0<number<8
     // EFFECTS: returns the number of instances there are number of the given color on a diagonal and false otherwise
     private int checkDiagonalWin(int color, int number) {
         int acc = 0;
@@ -156,7 +158,7 @@ public class GameBoard implements Writable {
         return acc;
     }
 
-    // REQUIRES: direction = -1 or 1
+    // REQUIRES: direction = -1 or 1, color = 0 or 1, 0<number<8
     // EFFECTS: return true if the next number pieces above and to the right (if direction is 1) or below and
     // to the right (if direction is -1) of piece in given column and height are the given color
     private boolean checkWinNextFourRightDiagonal(int column, int height, int color, int direction, int number) {
@@ -184,7 +186,7 @@ public class GameBoard implements Writable {
         }
     }
 
-
+    // REQUIRES: color = 0 or 1, 0<number<8
     // EFFECTS: returns the number of instances there are number of the given color on top of each other
     private int checkVerticalWin(int color, int number) {
         int acc = 0;
@@ -195,6 +197,7 @@ public class GameBoard implements Writable {
         return acc;
     }
 
+    // REQUIRES: color = 0 or 1, 0<number<8
     // EFFECTS: returns the number of instances there are number color consecutive pieces in a column
     private int checkWinColumn(ArrayList<GamePiece> column, int color, int number) {
         int consecutive = 0; // number of consecutive pieces seen so far
@@ -227,6 +230,7 @@ public class GameBoard implements Writable {
         return acc;
     }
 
+    // REQUIRES: color = 0 or 1, 0<number<8
     // EFFECTS: true if the next number pieces to the right, starting with piece in given column and height, are the
     // given color
     private boolean checkWinNextNumberRight(int column, int height, int color, int number) {
@@ -264,19 +268,84 @@ public class GameBoard implements Writable {
                 done = true;
             }
         }
+    }
 
+    // MODIFIES: this
+    // EFFECTS: places a yellow piece in a smart place
+    // English explanation of strategy:
+    // If it can get 4 in a row it goes there. Otherwise, if it can block you from getting four
+    // in a row it goes there. Otherwise if it can get 3 in a row it goes there. Otherwise,
+    // if it can block you from getting 3 in a row it goes there. And so on
+    //
+    // It's a basic strategy but is pretty hard to beat because it's never going to miss anything
+    // It can't think multiple turns ahead, though, so you can still beat if you think ahead
+    // and trap in a spot that it will lose no matter where it goes.
+    //
+    // To make it better it would need to think multiple turns ahead, and that would probably be
+    // too complex to hard-code the logic and would require some form of machine learning
+    // or more complicated algorithm (things I would struggle to implement with my current abilities)
+    public void smartAIMove() {
+        for (int i = 4; i > 0; i--) { // for 4 in a row, then 3, 2, and lastly 1
+            if (checkAImove(YELLOW, i)) { // see if there's a spot you can put yellow to get that many in a row
+                return;
+            }
+            if (checkAImove(RED, i)) {
+                return;
+            }
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: see which columns you could add a piece of given color to that
+    // increases the number of instances there are consecutive in a row of the given color
+    // if there are any such columns, put a yellow piece in a random one of them and return true
+    // if not, return false
+    private boolean checkAImove(int color, int consecutive) {
+        GamePiece gp = new GamePiece(color);
+        int baseline = checkConsecutive(color, consecutive);
+        ArrayList<Integer> possibleColumns = new ArrayList<>(); //columns that would work
+        for (int i = 1; i <= BOARD_WIDTH; i++) { //get the possible columns
+            if (addPiece(i, gp)) {
+                if (checkConsecutive(color, consecutive) > baseline) {
+                    // if adding a piece to that column makes more consecutive,
+                    // add the number of that col to possibleColumns
+                    possibleColumns.add(i);
+                }
+                removePiece(i);
+            }
+        }
+
+        // then put a yellow piece in one of the possible columns
+        int numPossibleColumns = possibleColumns.size();
+        if (numPossibleColumns > 0) {
+            int rand = (int) (Math.random() * numPossibleColumns);
+            int moveColumn = possibleColumns.get(rand);
+            GamePiece yellowPiece = new GamePiece(YELLOW);
+            addPiece(moveColumn, yellowPiece);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    // REQUIRES: there is a piece in the given column
+    // MODIFIES: this
+    // EFFECTS: removes the top piece from given column (1-7)
+    private void removePiece(int column) {
+        int size = board.get(column - 1).size();
+        board.get(column - 1).remove(size - 1);
     }
 
     // MODIFIES: this
     // EFFECTS: if a color has won or there is a tie (full board), adds one to their win total and
     // returns true. Else returns false
     public boolean checkGameOver() {
-        if (checkWin(YELLOW, 4) > 0) {
+        if (checkConsecutive(YELLOW, 4) > 0) {
             yellowWins++;
             return true;
         }
 
-        if (checkWin(RED, 4) > 0) {
+        if (checkConsecutive(RED, 4) > 0) {
             redWins++;
             return true;
         }
