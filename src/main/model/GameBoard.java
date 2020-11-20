@@ -165,6 +165,7 @@ public class GameBoard implements Writable {
         try {
             int consecutive = 0;
             for (int i = 0; i < number; i++) {
+
                 if (board.get(column + i).get(height + (direction * i)).getColor() == color) {
                     consecutive++;
                     if (consecutive == number) {
@@ -231,8 +232,8 @@ public class GameBoard implements Writable {
     }
 
     // REQUIRES: color = 0 or 1, 0<number<8
-    // EFFECTS: true if the next number pieces to the right, starting with piece in given column and height, are the
-    // given color
+    // EFFECTS: true if the next number pieces to the right,
+    // starting with piece in given column and height, are the given color
     private boolean checkWinNextNumberRight(int column, int height, int color, int number) {
         try {
             int consecutive = 0;
@@ -253,7 +254,7 @@ public class GameBoard implements Writable {
                 }
             }
             return false;
-        } catch (Exception e) { // if the four to the right include an empty spot (would give an array out of bounds)
+        } catch (Exception e) { // if the number to the right include an empty spot (would give an array out of bounds)
             return false;
         }
     }
