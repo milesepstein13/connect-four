@@ -6,6 +6,8 @@ import persistance.Writable;
 
 import java.util.ArrayList;
 
+import static java.lang.Thread.sleep;
+
 // Represents a board for a game of connect 4. It's a 7X7 grid that you can add red or yellow
 // pieces to. When you add a piece it falls to the bottom of the column.
 public class GameBoard implements Writable {
@@ -241,7 +243,8 @@ public class GameBoard implements Writable {
     //
     // It's a basic strategy but is pretty hard to beat because it's never going to miss anything
     // It can't think multiple turns ahead, though, so you can still beat if you think ahead
-    // and trap in a spot that it will lose no matter where it goes.
+    // and trap in a spot that it will lose no matter where it goes. It still occasionally does something
+    // stupid though
     //
     // To make it better it would need to think multiple turns ahead, and that would probably be
     // too complex to hard-code the logic and would require some form of machine learning
