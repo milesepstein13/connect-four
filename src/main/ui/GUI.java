@@ -225,29 +225,37 @@ public class GUI extends JFrame implements ActionListener {
     }
 
     // MODIFIES: this
-    // EFFECTS: performs post-move behavior. If the game is over, update accordingly, pause,
+    // EFFECTS: performs post-move behavior. If the game is over, update accordingly, say so in popup, pause,
     // beep, and reset the board. If it's the ai's turn to go, the ai goes and check for win again
     private void process() {
         if (board.checkGameOver()) {
             endGame();
         } else if (!board.getTurn() && board.getNumPlayers() == 1) {
             board.smartAIMove();
+            updateDisplay();
             board.switchTurn();
             if (board.checkGameOver()) {
                 endGame();
             }
+
         }
     }
 
     // MODIFIES: this
-    // EFFECTS: pauses, beeps, and resets the board
+    // EFFECTS: puts up a popup message saying who won, beeps, and resets the board
     private void endGame() {
         //beeps and pauses when you win
         Toolkit.getDefaultToolkit().beep();
-        try {
-            sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        if (board.isFull()) {
+            JOptionPane.showMessageDialog(this, "It's a tie!");
+        } else {
+            String winner;
+            if (board.getTurn() == RED_TURN) {
+                winner = "Yellow"; // opposite because the player whose turn it is just lost
+            } else {
+                winner = "Red";
+            }
+            JOptionPane.showMessageDialog(this, winner + " wins! Good game!");
         }
         board.clear();
         board.setTurn(RED_TURN);
@@ -282,10 +290,12 @@ public class GUI extends JFrame implements ActionListener {
             board.setNumPlayers(1);
             if (!board.getTurn() && board.getNumPlayers() == 1) {
                 board.smartAIMove();
-                board.switchTurn();
                 if (board.checkGameOver()) {
-                    board.clear();
+                    endGame();
+                } else {
+                    board.switchTurn();
                 }
+
             }
         }
     }
