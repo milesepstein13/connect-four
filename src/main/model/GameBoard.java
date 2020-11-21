@@ -133,9 +133,9 @@ public class GameBoard implements Writable {
 
     // REQUIRES: color = 0 or 1, 0<number<8
     // EFFECTS: returns the number of instances on the board that the given
-    // given (0 for red and 1 for yellow) color has number pieces in a row
+    // color (0 for red and 1 for yellow) has number pieces out of four and isn't blocked
     public int checkConsecutive(int color, int number) {
-        return checkHorizontalWin(color, number) + checkVerticalWin(color, number) + checkDiagonalWin(color, number);
+        return checkVerticalWin(color, number) + checkDiagonalWin(color, number);
     }
 
     // REQUIRES: color = 0 or 1, 0<number<8
@@ -145,10 +145,13 @@ public class GameBoard implements Writable {
         for (int i = 0; i < BOARD_WIDTH; i++) {
             for (int j = 0; j < BOARD_HEIGHT; j++) {
                 if (board.get(i).size() > j) { // for each piece on the board
-                    if (checkWinNextFourRightDiagonal(i, j, color, 1, number)) {
+                    if (checkWinNextFourRightDirection(i, j, color, 1, number)) {
                         acc++;
                     }
-                    if (checkWinNextFourRightDiagonal(i, j, color, -1, number)) {
+                    if (checkWinNextFourRightDirection(i, j, color, -1, number)) {
+                        acc++;
+                    }
+                    if (checkWinNextFourRightDirection(i, j, color, 0, number)) {
                         acc++;
                     }
                 }
@@ -159,32 +162,33 @@ public class GameBoard implements Writable {
     }
 
     // REQUIRES: direction = -1 or 1, color = 0 or 1, 0<number<8
-    // EFFECTS: return true if the next number pieces above and to the right (if direction is 1) or below and
-    // to the right (if direction is -1) of piece in given column and height are the given color
-    private boolean checkWinNextFourRightDiagonal(int column, int height, int color, int direction, int number) {
-        try {
-            int consecutive = 0;
-            for (int i = 0; i < number; i++) {
-
-                if (board.get(column + i).get(height + (direction * i)).getColor() == color) {
-                    consecutive++;
-                    if (consecutive == number) {
-                        return true; // if there have been number pieces in a row of the given color
-                    }
-                } else {
-                    //return false; //if you run into a piece of the wrong color.
-                    // Commenting this line out doesn't change the functionality.
-                    // Commenting it out makes the program less efficient
-                    // (because it keep checking even after running into the wrong piece) but ensures
-                    // complete code coverage. If this line is uncommented, the next return statement
-                    // is never used, so code coverage is less than 100%, even though that line is needed
-                    // for the code to compile.
-                }
+    // EFFECTS: return true number of the next 4 pieces above and to the right (if direction is 1)
+    // or below and to the right (if direction is -1) or to the right (if direction is 0)
+    // of piece in given column and height are the given color with out the opposite color in the way
+    private boolean checkWinNextFourRightDirection(int column, int height, int color, int direction, int number) {
+        int consecutive = 0;
+        for (int i = 0; i < 4; i++) {
+            int piece; // the color of the piece if it exists, else -1
+            int columnIndex = column + i; // the index of the spot if there's nothing in it
+            int rowIndex = height + (direction * i);
+            try {
+                piece = board.get(column + i).get(height + (direction * i)).getColor();
+            } catch (Exception e) {
+                piece = -1;
             }
-            return false;
-        } catch (Exception e) { // if the four to the right include an empty spot (would give an array out of bounds)
-            return false;
+
+            if (piece == color) {
+                consecutive++;
+            } else if (piece == RED || piece == YELLOW) {
+                consecutive = 0;
+            } else if (columnIndex >= 7 || rowIndex >= 7 || rowIndex < 0) {
+                consecutive = 0;
+            }
         }
+        if (consecutive == number) {
+            return true; // if there have been number of the given color
+        }
+        return false;
     }
 
     // REQUIRES: color = 0 or 1, 0<number<8
@@ -216,48 +220,6 @@ public class GameBoard implements Writable {
         return acc;
     }
 
-    // EFFECTS: returns the number of instances there are number of the given color next to each other
-    private int checkHorizontalWin(int color, int number) {
-        int acc = 0;
-        for (int i = 0; i < BOARD_WIDTH - (7 - number); i++) {
-            for (int j = 0; j < BOARD_HEIGHT; j++) {
-                if (board.get(i).size() > j) { // for each piece on the board (except in the last 3 columns)
-                    if (checkWinNextNumberRight(i, j, color, number)) {
-                        acc++;
-                    }
-                }
-            }
-        }
-        return acc;
-    }
-
-    // REQUIRES: color = 0 or 1, 0<number<8
-    // EFFECTS: true if the next number pieces to the right,
-    // starting with piece in given column and height, are the given color
-    private boolean checkWinNextNumberRight(int column, int height, int color, int number) {
-        try {
-            int consecutive = 0;
-            for (int i = 0; i < number; i++) {
-                if (board.get(column + i).get(height).getColor() == color) {
-                    consecutive++;
-                    if (consecutive == number) {
-                        return true; // if there have been n pieces in a row of the given color
-                    }
-                } else {
-                    //return false; //if you run into a piece of the wrong color.
-                    // Commenting this line out doesn't change the functionality.
-                    // Commenting it out makes the program less efficient
-                    // (because it keep checking even after running into the wrong piece) but ensures
-                    // complete code coverage. If this line is uncommented, the next return statement
-                    // is never used, so code coverage is less than 100%, even though that line is needed
-                    // for the code to compile.
-                }
-            }
-            return false;
-        } catch (Exception e) { // if the number to the right include an empty spot (would give an array out of bounds)
-            return false;
-        }
-    }
 
     // MODIFIES: this
     // EFFECTS: places given piece in a random not full column
@@ -275,8 +237,8 @@ public class GameBoard implements Writable {
     // EFFECTS: places a yellow piece in a smart place
     // English explanation of strategy:
     // If it can get 4 in a row it goes there. Otherwise, if it can block you from getting four
-    // in a row it goes there. Otherwise if it can get 3 in a row it goes there. Otherwise,
-    // if it can block you from getting 3 in a row it goes there. And so on with 2 and 1
+    // in a row it goes there. Otherwise if it can get 3 out of 4 it goes there. Otherwise,
+    // if it can block you from getting 3 out of 4 it goes there. And so on with 2 and 1
     //
     // It's a basic strategy but is pretty hard to beat because it's never going to miss anything
     // It can't think multiple turns ahead, though, so you can still beat if you think ahead
