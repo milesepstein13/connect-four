@@ -423,4 +423,12 @@ public class GameBoardTest {
 
     }
 
+    @Test
+    public void testSmartAIOneSpot() {
+        board.addPiece(4, gp2);
+        board.smartAIMove();
+        assertTrue(board.getColumn(4).get(1).isYellow());
+
+    }
+
 }

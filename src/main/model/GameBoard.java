@@ -15,7 +15,6 @@ public class GameBoard implements Writable {
     public static final int RED = 0;
     public static final int YELLOW = 1;
 
-
     private int redWins;
     private int yellowWins;
     private int ties;
@@ -222,7 +221,7 @@ public class GameBoard implements Writable {
 
 
     // MODIFIES: this
-    // EFFECTS: places given piece in a random not full column
+    // EFFECTS: places given piece in a random not-full column
     public void aiMove(GamePiece gp) {
         boolean done = false;
         while (!done) {
@@ -248,29 +247,47 @@ public class GameBoard implements Writable {
     // too complex to hard-code the logic and would require some form of machine learning
     // or more complicated algorithm (things I would struggle to implement with my current abilities)
     public void smartAIMove() {
-        for (int i = 4; i > 0; i--) { // for 4 in a row, then 3, 2, and lastly 1
-            if (checkAImove(YELLOW, i)) { // see if there's a spot you can put yellow to get that many in a row
+        //if there's only one piece on the board, go on top of it
+        int numPieces = 0;
+        for (int i = 0; i < BOARD_WIDTH; i++) {
+            numPieces += getColumn(i + 1).size();
+        }
+        if (numPieces == 1) {
+            for (int i = 0; i < BOARD_WIDTH; i++) {
+                if (getColumn(i + 1).size() == 1) {
+                    GamePiece gp = new GamePiece(YELLOW);
+                    addPiece(i + 1, gp);
+                }
+            }
+            return;
+        }
+        // Otherwise, do more complicated behavior (explained above)
+        for (int i = 4; i > 0; i--) { // for 4, then 3, 2, and lastly 1 out of 4
+            if (checkAIMove(YELLOW, i)) {
+                // see if there's a spot you can put yellow to get that many
                 return;
             }
-            if (checkAImove(RED, i)) {
+            if (checkAIMove(RED, i)) {
+                // same but for blocking red from getting that many
                 return;
             }
         }
     }
+
 
     // MODIFIES: this
     // EFFECTS: see which columns you could add a piece of given color to that
     // increases the number of instances there are consecutive in a row of the given color
     // if there are any such columns, put a yellow piece in a random one of them and return true
     // if not, return false
-    private boolean checkAImove(int color, int consecutive) {
+    private boolean checkAIMove(int color, int consecutive) {
         GamePiece gp = new GamePiece(color);
         int baseline = checkConsecutive(color, consecutive);
         ArrayList<Integer> possibleColumns = new ArrayList<>(); //columns that would work
         for (int i = 1; i <= BOARD_WIDTH; i++) { //get the possible columns
             if (addPiece(i, gp)) {
                 if (checkConsecutive(color, consecutive) > baseline) {
-                    // if adding a piece to that column makes more consecutive,
+                    // if adding a piece to that column makes more places with consecutive pieces,
                     // add the number of that col to possibleColumns
                     possibleColumns.add(i);
                 }
