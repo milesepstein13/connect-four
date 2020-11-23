@@ -44,3 +44,11 @@ toward work that I hope to do in the future.
 - As a user, I want to be able to add a game piece of my own color to any of the allowed spots on the board
 - As a user, I want to hear an auditory indication when a game is over and see a tally of total wins for each player
 - As a user, I want to be able to load and save the state of the application
+
+#Phase 4: Task 2
+There is a bi-directional association between the GUI and Spot classes. The GUI has
+a list of Spots as a field and the Spots are painted on the board. 
+The GUI calls update on the spots, which changes their color to whatever is needed. 
+Spot has GUI as a field and calls getWidth and getHeight on the GUI. It performs a simple
+calculation with the returned values to determine its own size (this is how the spots change size
+whenever you change the size of the window).
