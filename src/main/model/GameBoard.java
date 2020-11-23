@@ -5,6 +5,7 @@ import org.json.JSONObject;
 import persistance.Writable;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import static java.lang.Thread.sleep;
 
@@ -281,7 +282,7 @@ public class GameBoard implements Writable {
     // MODIFIES: this
     // EFFECTS: see which columns you could add a piece of given color to that
     // increases the number of instances there are consecutive in a row of the given color
-    // if there are any such columns, put a yellow piece in a random one of them and return true
+    // if there are any such columns, put a yellow piece in the middle one of them and return true
     // if not, return false
     private boolean checkAIMove(int color, int consecutive) {
         GamePiece gp = new GamePiece(color);
@@ -298,17 +299,34 @@ public class GameBoard implements Writable {
             }
         }
 
-        // then put a yellow piece in one of the possible columns
+        // then put a yellow piece in the middle one of the possible columns
         int numPossibleColumns = possibleColumns.size();
         if (numPossibleColumns > 0) {
-            int rand = (int) (Math.random() * numPossibleColumns);
-            int moveColumn = possibleColumns.get(rand);
+            int moveColumn = getAtMid(possibleColumns);
             GamePiece yellowPiece = new GamePiece(YELLOW);
             addPiece(moveColumn, yellowPiece);
             return true;
         } else {
             return false;
         }
+    }
+
+    // EFFECTS: If the list has an odd size, return the value at the middle index
+    // If it has even size, return a random one of the integers at the middle two indices
+    private int getAtMid(ArrayList<Integer> possibleColumns) {
+        int index;
+        if (possibleColumns.size() % 2 == 0) { // if it's even
+            Random random = new Random();
+            boolean rand = random.nextBoolean();
+            if (rand) {
+                index = possibleColumns.size() / 2 - 1;
+            } else {
+                index = possibleColumns.size() / 2;
+            }
+        } else { //if it's odd
+            index = (possibleColumns.size() - 1) / 2;
+        }
+        return possibleColumns.get(index);
     }
 
     // REQUIRES: there is a piece in the given column
