@@ -145,17 +145,15 @@ public class GameBoard implements Writable {
     private int checkDiagonalWin(int color, int number) {
         int acc = 0;
         for (int i = 0; i < BOARD_WIDTH; i++) {
-            for (int j = 0; j < BOARD_HEIGHT; j++) {
-                if (board.get(i).size() > j) { // for each piece on the board
-                    if (checkWinNextFourRightDirection(i, j, color, 1, number)) {
-                        acc++;
-                    }
-                    if (checkWinNextFourRightDirection(i, j, color, -1, number)) {
-                        acc++;
-                    }
-                    if (checkWinNextFourRightDirection(i, j, color, 0, number)) {
-                        acc++;
-                    }
+            for (int j = 0; j < BOARD_HEIGHT; j++) { // for each spot on the board
+                if (checkWinNextFourRightDirection(i, j, color, 1, number)) {
+                    acc++;
+                }
+                if (checkWinNextFourRightDirection(i, j, color, -1, number)) {
+                    acc++;
+                }
+                if (checkWinNextFourRightDirection(i, j, color, 0, number)) {
+                    acc++;
                 }
             }
 
@@ -182,9 +180,9 @@ public class GameBoard implements Writable {
             if (piece == color) {
                 consecutive++;
             } else if (piece == RED || piece == YELLOW) {
-                consecutive = 0;
+                return false;
             } else if (columnIndex >= 7 || rowIndex >= 7 || rowIndex < 0) {
-                consecutive = 0;
+                return false;
             }
         }
         if (consecutive == number) {
@@ -251,21 +249,6 @@ public class GameBoard implements Writable {
     // too complex to hard-code the logic and would require some form of machine learning
     // or more complicated algorithm (things I would struggle to implement with my current abilities)
     public void smartAIMove() {
-        //if there's only one piece on the board, go on top of it
-        int numPieces = 0;
-        for (int i = 0; i < BOARD_WIDTH; i++) {
-            numPieces += getColumn(i + 1).size();
-        }
-        if (numPieces == 1) {
-            for (int i = 0; i < BOARD_WIDTH; i++) {
-                if (getColumn(i + 1).size() == 1) {
-                    GamePiece gp = new GamePiece(YELLOW);
-                    addPiece(i + 1, gp);
-                }
-            }
-            return;
-        }
-        // Otherwise, do more complicated behavior (explained above)
         for (int i = 4; i > 0; i--) { // for 4, then 3, 2, and lastly 1 out of 4
             if (checkAIMove(YELLOW, i)) {
                 // see if there's a spot you can put yellow to get that many
@@ -313,7 +296,7 @@ public class GameBoard implements Writable {
 
     // EFFECTS: If the list has an odd size, return the value at the middle index
     // If it has even size, return a random one of the integers at the middle two indices
-    private int getAtMid(ArrayList<Integer> possibleColumns) {
+    public int getAtMid(ArrayList<Integer> possibleColumns) {
         int index;
         if (possibleColumns.size() % 2 == 0) { // if it's even
             Random random = new Random();

@@ -3,6 +3,8 @@ package model;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -428,7 +430,14 @@ public class GameBoardTest {
         board.addPiece(4, gp2);
         board.smartAIMove();
         assertTrue(board.getColumn(4).get(1).isYellow());
-
     }
+
+    @Test
+    public void testSmartAIOneRedSpot() {
+        board.addPiece(4, gp1);
+        board.smartAIMove();
+        assertTrue(board.getColumn(4).get(1).isYellow());
+    }
+
 
 }
