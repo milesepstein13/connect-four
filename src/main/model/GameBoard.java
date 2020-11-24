@@ -259,7 +259,8 @@ public class GameBoard implements Writable {
                 return;
             }
         }
-    }
+    } // code coverage says I'm missing this line. I think it's because the method
+    // always returns before the end of the for loop but that's supposed to happen
 
 
     // MODIFIES: this

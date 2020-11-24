@@ -439,5 +439,17 @@ public class GameBoardTest {
         assertTrue(board.getColumn(4).get(1).isYellow());
     }
 
+    @Test
+    public void testSmartAIEven() {
+        for (int i = 0; i < 10; i++) {
+            board.addPiece(5, gp1);
+            board.smartAIMove();
+            if (board.getColumn(3).isEmpty()) {
+                assertEquals(2, board.getColumn(4).size() + board.getColumn(5).size());
+            }
+            board.clear();
+        }
+    }
+
 
 }

@@ -31,7 +31,7 @@ application to my field of study, the simple artificial
 intelligence of the automated oppenent is certainly a step
 toward work that I hope to do in the future.
 
-#User Stories
+# User Stories
 - As a user, I want to be able to select a one or two player game before each game
 - As a user, I want to be able to add a game piece of my own color to any of the allowed spots on the board
 - As a user, I want to be able to see when the game is over and be told who won
@@ -39,13 +39,13 @@ toward work that I hope to do in the future.
 - As a user, I want to be able to save a game board
 - As a user, I want to be able to load a saved game board and continue playing
 
-#User stories for GUI
+# User stories for GUI
 - As a user, I want to be able to select a one or two player game at any time
 - As a user, I want to be able to add a game piece of my own color to any of the allowed spots on the board
 - As a user, I want to hear an auditory indication when a game is over and see a tally of total wins for each player
 - As a user, I want to be able to load and save the state of the application
 
-#Phase 4: Task 2
+# Phase 4: Task 2
 There is a bi-directional association between the GUI and Spot classes. The GUI has
 a list of Spots as a field and the Spots are painted on the board. 
 The GUI calls update on the spots, which changes their color to whatever is needed. 
