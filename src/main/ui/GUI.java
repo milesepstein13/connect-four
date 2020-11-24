@@ -15,7 +15,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import static java.lang.Thread.sleep;
 
 // Plays game of connect four in a popup. IIt is a 2 player head-to-head game, where players take turns
 // adding game pieces to the board, with the goal of having four of your own pieces in a row
@@ -31,7 +30,7 @@ public class GUI extends JFrame implements ActionListener {
     private JsonWriter jsonWriter;
     private JsonReader jsonReader;
 
-    //Visible pieces
+    //Visible JComponents
     private ArrayList<ArrayList<Spot>> spots;
     private ArrayList<DropperButton> droppers;
     private LoadButton loadButton;
