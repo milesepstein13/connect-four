@@ -1,0 +1,16 @@
+{
+    "redWins": 0,
+    "ties": 0,
+    "turn": true,
+    "yellowWins": 0,
+    "numPlayers": 1,
+    "board": [
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        []
+    ]
+}

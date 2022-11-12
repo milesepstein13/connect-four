@@ -1,0 +1,22 @@
+{
+    "redWins": 1,
+    "ties": 0,
+    "turn": false,
+    "yellowWins": 0,
+    "numPlayers": 2,
+    "board": [
+        [{"color": 1}],
+        [],
+        [],
+        [
+            {"color": 0},
+            {"color": 0}
+        ],
+        [
+            {"color": 1},
+            {"color": 0}
+        ],
+        [],
+        []
+    ]
+}
