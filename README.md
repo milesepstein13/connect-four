@@ -2,7 +2,7 @@
 
 ## CPSC 210 2020 WT1 
 
-From-scratch project that runs connect four in a pop-up window. Options for two-player (two users) and one-player (user against AI, which plays at a beginner-to-intermediate level--knows basic strategy but can't think far ahead)
+From-scratch project that runs connect four in console and in a pop-up window. Options for two-player (two users) and one-player (user against AI, which plays at a beginner-to-intermediate level--knows basic strategy but can't think far ahead)
 
 ## Miles Epstein
 
