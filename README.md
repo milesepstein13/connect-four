@@ -55,7 +55,7 @@ Spot has GUI as a field and calls getWidth and getHeight on the GUI. It performs
 calculation with the returned values to determine its own size (this is how the spots change size
 whenever you change the size of the window).
 
-#Phase 4: Task 3
+# Phase 4: Task 3
 Generally, I am happy with my design as it is fairly straightforward and not 
 overly coupled or confusing. One possible change would be to create a class
 along the lines of "player" that is abstract and provides the shared 
